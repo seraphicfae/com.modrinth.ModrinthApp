@@ -39,6 +39,9 @@ modules:
   # Required for older versions of Minecraft
   - modules/xrandr.yml
 
+  # pnpm isn't packaged by node26 extension
+  - modules/pnpm.yml
+
   - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
 
   # Some controller mods require libusb (see https://github.com/isXander/Controlify/issues/31)
@@ -59,8 +62,6 @@ modules:
       env:
         CARGO_HOME: /run/build/ModrinthApp/cargo
         XDG_CACHE_HOME: /run/build/ModrinthApp/flatpak-node/cache
-        npm_config_cache: /run/build/ModrinthApp/flatpak-node/npm-cache
-        npm_config_offline: 'true'
         CARGO_NET_OFFLINE: 'true'
     sources:
     - type: git
@@ -76,9 +77,9 @@ modules:
     - type: file
       path: com.modrinth.ModrinthApp.desktop
     build-commands:
-    - npm ci --offline
+    - pnpm install --offline
     - cargo --offline fetch --manifest-path apps/app/Cargo.toml --verbose
-    - npm run --offline tauri build -- --no-bundle
+    - pnpm tauri build
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
     - install -Dm644 com.modrinth.ModrinthApp.metainfo.xml /app/share/metainfo/com.modrinth.ModrinthApp.metainfo.xml
 

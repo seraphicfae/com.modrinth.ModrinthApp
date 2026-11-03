@@ -1,0 +1,13 @@
+name: pnpm
+buildsystem: simple
+sources:
+  - type: archive
+    url: https://registry.npmjs.org/@pnpm/exe.linux-x64/-/exe.linux-x64-12.11.2.tgz
+    sha512: 14aed029edb8018829a49c0ede6a68a18a6d76ebaf206a8a24f8b969cecc7675a48d4cb8e8905f621096d20ae7916282f1839fd31faf1af8ae42a2448f74a941
+    only-arches: [x86_64]
+  - type: archive
+    url: https://registry.npmjs.org/@pnpm/exe.linux-arm64/-/exe.linux-arm64-12.11.2.tgz
+    sha512: e9ef190105301570161c71efe457ac5aa7ff9042b4e30ba2b41bf97ff831ce40b40e205f6a2c6bf9ffba25079d7bc485e098b92dc33054525bcc0b5f7e95b112
+    only-arches: [aarch64]
+build-commands:
+  - install -Dm755 pnpm /app/bin/pnpm
