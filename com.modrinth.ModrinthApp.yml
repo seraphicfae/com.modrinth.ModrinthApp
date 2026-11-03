@@ -63,10 +63,10 @@ modules:
         npm_config_offline: 'true'
         CARGO_NET_OFFLINE: 'true'
     sources:
-    - type: archive
-      url: https://github.com/modrinth/code/archive/refs/tags/v0.22.1.tar.gz
-      sha512: 47a34ff8ec0aefca8c16ba0d8efd72c0e4933f26875976cb8e507d4d40f6d1a56cce23e3d85d0cfd68b5d8dbd9d0fec4b87113d7ec81686b2d8ebb48fec01459
-      dest-filename: modrinth-app.tar.gz
+    - type: git
+      url: https://github.com/modrinth/code
+      tag: v0.22.1
+      commit: b3a202687e9a33e5f5da676ae7b62181a2011702
     - cargo-sources.json
     - node-sources.json
     - com.modrinth.ModrinthApp.metainfo.xml
