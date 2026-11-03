@@ -77,7 +77,7 @@ modules:
       path: com.modrinth.ModrinthApp.desktop
     build-commands:
     - npm ci --offline
-    - cargo --offline fetch --manifest-path Cargo.toml --verbose
+    - cargo --offline fetch --manifest-path apps/app/Cargo.toml --verbose
     - npm run --offline tauri build -- --no-bundle
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
     - install -Dm644 com.modrinth.ModrinthApp.metainfo.xml /app/share/metainfo/com.modrinth.ModrinthApp.metainfo.xml
