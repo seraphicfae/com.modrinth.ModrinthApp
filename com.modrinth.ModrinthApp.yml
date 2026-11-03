@@ -6,19 +6,18 @@ sdk: org.gnome.Sdk
 sdk-extensions:
 - org.freedesktop.Sdk.Extension.node26
 - org.freedesktop.Sdk.Extension.rust-stable
+- org.freedesktop.Sdk.Extension.openjdk17
 build-options:
-  append-path: /usr/lib/sdk/node26/bin:/usr/lib/sdk/rust-stable/bin
+  append-path: /usr/lib/sdk/node26/bin:/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/openjdk17/bin
 
 command: modrinth-app
 finish-args:
   - --filesystem=xdg-download:ro # allow drag and drop from downloads
   - --filesystem=xdg-run/app/com.discordapp.Discord:create # allows for discord rpc (flatpak)
   - --filesystem=xdg-run/discord-ipc-0 # allows for discord rpc
-  # We can't use this yet, see <https://github.com/flatpak/flatpak/issues/5681>
-  # So we have to use device=all
-  # - --device=dri
-  # - --device=input
-  - --device=all
+  - --device=dri
+  - --device=input
+  - --device-if=all:!has-input-device
   - --share=ipc
   - --share=network
   - --socket=pulseaudio
@@ -65,6 +64,8 @@ modules:
         CARGO_NET_OFFLINE: 'true'
         PNPM_CONFIG_TRUST_LOCKFILE: 'true'
         PNPM_CONFIG_STORE_DIR: /run/build/ModrinthApp/flatpak-node/pnpm-store
+        JAVA_HOME: /usr/lib/sdk/openjdk17/jvm/openjdk-17
+        JAVA_COMPILER: /usr/lib/sdk/openjdk17/jvm/openjdk-17/bin/javac
     sources:
     - type: git
       url: https://github.com/modrinth/code
@@ -78,8 +79,9 @@ modules:
       path: com.modrinth.ModrinthApp.desktop
     build-commands:
     - pnpm install --offline --frozen-lockfile --trust-lockfile --force
-    - cargo --offline fetch --manifest-path Cargo.toml --verbose
-    - pnpm tauri build
+    - cargo --offline fetch --manifest-path apps/app/Cargo.toml --verbose
+    - cargo build --offline --release --all-features
+    - pnpm --filter=@modrinth/app run tauri build --config apps/app/tauri-release.conf.json --no-bundle
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
     - install -Dm644 com.modrinth.ModrinthApp.metainfo.xml /app/share/metainfo/com.modrinth.ModrinthApp.metainfo.xml
 
