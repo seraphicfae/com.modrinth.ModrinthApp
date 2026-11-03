@@ -53,13 +53,13 @@ modules:
       - type: file
         path: prime-run
 
-  - name: modrinth-app
+  - name: ModrinthApp
     buildsystem: simple
     build-options:
       env:
-        CARGO_HOME: /run/build/modrinth-app/cargo
-        XDG_CACHE_HOME: /run/build/modrinth-app/flatpak-node/cache
-        npm_config_cache: /run/build/modrinth-app/flatpak-node/npm-cache
+        CARGO_HOME: /run/build/ModrinthApp/cargo
+        XDG_CACHE_HOME: /run/build/ModrinthApp/flatpak-node/cache
+        npm_config_cache: /run/build/ModrinthApp/flatpak-node/npm-cache
         npm_config_offline: 'true'
         CARGO_NET_OFFLINE: 'true'
     sources:
@@ -74,10 +74,7 @@ modules:
     build-commands:
     - cargo --offline fetch --manifest-path Cargo.toml --verbose
     - npm run --offline tauri build -- --no-bundle
-    - install -Dm755 src-tauri/target/release/bundle/deb/modrinth-app/data/usr/bin/ModrinthApp /app/bin/ModrinthApp
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
-    - install -Dm644 src-tauri/target/release/bundle/deb/modrinth-app/data/usr/share/icons/hicolor/128x128/apps/128x128.png /app/share/icons/hicolor/128x128/apps/ModrinthApp.png
-    - install -Dm644 src-tauri/target/release/bundle/deb/modrinth-app/data/usr/share/icons/hicolor/512x512/apps/icon.png /app/share/icons/hicolor/512x512/apps/ModrinthApp.png
     - install -Dm644 com.modrinth.ModrinthApp.metainfo.xml /app/share/metainfo/com.modrinth.ModrinthApp.metainfo.xml
 
   # Wrap the executable in a wrapper to run scripts before running it
