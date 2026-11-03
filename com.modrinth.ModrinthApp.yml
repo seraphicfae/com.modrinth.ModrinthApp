@@ -67,11 +67,16 @@ modules:
       url: https://github.com/modrinth/code
       tag: v0.22.1
       commit: b3a202687e9a33e5f5da676ae7b62181a2011702
-    - cargo-sources.json
-    - node-sources.json
-    - com.modrinth.ModrinthApp.metainfo.xml
-    - com.modrinth.ModrinthApp.desktop
+    - type: file
+      path: cargo-sources.json
+    - type: file
+      path: node-sources.json
+    - type: file
+      path: com.modrinth.ModrinthApp.metainfo.xml
+    - type: file
+      path: com.modrinth.ModrinthApp.desktop
     build-commands:
+    - npm ci --offline
     - cargo --offline fetch --manifest-path Cargo.toml --verbose
     - npm run --offline tauri build -- --no-bundle
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
