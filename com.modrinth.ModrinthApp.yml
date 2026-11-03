@@ -77,7 +77,7 @@ modules:
     - type: file
       path: com.modrinth.ModrinthApp.desktop
     build-commands:
-    - pnpm install --offline
+    - pnpm install --offline --frozen-lockfile --trust-lockfile
     - cargo --offline fetch --manifest-path apps/app/Cargo.toml --verbose
     - pnpm tauri build
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
