@@ -26,6 +26,7 @@ finish-args:
   - --env=MODRINTH_EXTERNAL_UPDATE_PROVIDER=1
   - --env=MODRINTH_APP_SOURCE=flatpak
 
+rename-desktop-file: Modrinth App.desktop
 rename-icon: ModrinthApp
 
 modules:
@@ -46,15 +47,6 @@ modules:
   # Some controller mods require libusb (see https://github.com/isXander/Controlify/issues/31)
   # Indeed, it is already provided by the runtime
 
-  # Helper script used to wrap instances with the proper configuration for dGPUs
-  - name: prime-run
-    buildsystem: simple
-    build-commands:
-      - install -Dm755 prime-run "$FLATPAK_DEST"/bin/prime-run
-    sources:
-      - type: file
-        path: prime-run
-
   - name: ModrinthApp
     buildsystem: simple
     build-options:
@@ -69,8 +61,8 @@ modules:
     sources:
     - type: git
       url: https://github.com/modrinth/code
-      tag: v0.22.1
-      commit: b3a202687e9a33e5f5da676ae7b62181a2011702
+      tag: v0.23.0
+      commit: 6322e72caf2198199007da0bbd32d9fc5d8e43ce
     - cargo-sources.json
     - node-sources.json
     - type: file
@@ -94,3 +86,12 @@ modules:
     sources:
       - type: file
         path: modrinth-app-wrapper.sh
+
+  # Helper script used to wrap instances with the proper configuration for dGPUs
+  - name: prime-run
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 prime-run "$FLATPAK_DEST"/bin/prime-run
+    sources:
+      - type: file
+        path: prime-run
