@@ -7,8 +7,6 @@ sdk-extensions:
 - org.freedesktop.Sdk.Extension.node26
 - org.freedesktop.Sdk.Extension.rust-stable
 - org.freedesktop.Sdk.Extension.openjdk17
-build-options:
-  append-path: /usr/lib/sdk/node26/bin:/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/openjdk17/bin
 
 command: modrinth-app
 finish-args:
@@ -42,16 +40,18 @@ modules:
   # pnpm isn't packaged by node26 extension
   - modules/pnpm.yml
 
+  # Tray icon support
   - shared-modules/libappindicator/libappindicator-gtk3-12.10.json
-
-  # Some controller mods require libusb (see https://github.com/isXander/Controlify/issues/31)
-  # Indeed, it is already provided by the runtime
 
   - name: ModrinthApp
     buildsystem: simple
     build-options:
+      append-path: /usr/lib/sdk/node26/bin:/usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/openjdk17/bin:/usr/lib/sdk/openjdk17/gradle/bin
       env:
         CARGO_HOME: /run/build/ModrinthApp/cargo
+        CARGO_TARGET_DIR: 'target'
+        RUSTUP_TOOLCHAIN: 'stable'
+        COREPACK_ENABLE_STRICT: '0'
         XDG_CACHE_HOME: /run/build/ModrinthApp/flatpak-node/cache
         CARGO_NET_OFFLINE: 'true'
         PNPM_CONFIG_TRUST_LOCKFILE: 'true'
@@ -71,9 +71,10 @@ modules:
       path: com.modrinth.ModrinthApp.desktop
     build-commands:
     - pnpm install --offline --frozen-lockfile --trust-lockfile --force
+    - cp -f packages/app-lib/.env.prod packages/app-lib/.env
     - cargo --offline fetch --manifest-path apps/app/Cargo.toml --verbose
-    - cargo build --offline --release --all-features
-    - pnpm --filter=@modrinth/app run tauri build --config apps/app/tauri-release.conf.json --no-bundle
+    - pnpm --filter=@modrinth/app run tauri build --config /run/build/ModrinthApp/apps/app/tauri-release.conf.json --no-bundle
+    - install -Dm755 "target/release/Modrinth App" /app/bin/com.modrinth.ModrinthApp
     - install -Dm644 com.modrinth.ModrinthApp.desktop.desktop /app/share/applications/com.modrinth.ModrinthApp.desktop.desktop
     - install -Dm644 com.modrinth.ModrinthApp.metainfo.xml /app/share/metainfo/com.modrinth.ModrinthApp.metainfo.xml
 
